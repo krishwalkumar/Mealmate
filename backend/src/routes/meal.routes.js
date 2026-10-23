@@ -16,3 +16,4 @@ router.get('/my-attendance', getMyAttendance);
 router.get('/daily', requireRole('admin'), getDailyAttendance);
 
 module.exports = router;
+

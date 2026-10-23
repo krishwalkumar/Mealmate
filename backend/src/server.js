@@ -5,6 +5,10 @@ const { pool } = require('./config/db');
 const healthRoutes = require('./routes/health.routes');
 const authRoutes = require('./routes/auth.routes');
 const mealRoutes = require('./routes/meal.routes');
+const planRoutes = require('./routes/plan.routes');
+const paymentRoutes = require('./routes/payment.routes');
+const expenseRoutes = require('./routes/expense.routes');
+const adminRoutes = require('./routes/admin.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -26,17 +30,12 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       health: 'GET /api/health',
-      auth: {
-        register: 'POST /api/auth/register',
-        login: 'POST /api/auth/login',
-        me: 'GET /api/auth/me'
-      },
-      meals: {
-        toggle: 'POST /api/meals/toggle',
-        today: 'GET /api/meals/today',
-        myAttendance: 'GET /api/meals/my-attendance',
-        dailyOverview: 'GET /api/meals/daily'
-      }
+      auth: '/api/auth (register, login, me)',
+      meals: '/api/meals (toggle, today, my-attendance, daily)',
+      plans: '/api/plans (get, create, update, delete)',
+      payments: '/api/payments (my-payments, all, record, status)',
+      expenses: '/api/expenses (all, create, delete, summary)',
+      admin: '/api/admin (stats, students, update)'
     }
   });
 });
@@ -45,6 +44,10 @@ app.get('/', (req, res) => {
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/meals', mealRoutes);
+app.use('/api/plans', planRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error Handling
 app.use(notFoundHandler);

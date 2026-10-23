@@ -1,81 +1,116 @@
 import React from 'react';
-import HealthStatus from './components/HealthStatus';
-import { Utensils, Users, CalendarCheck, CreditCard, ShoppingBag, ShieldCheck } from 'lucide-react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+
+// Pages
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import StudentDashboard from './pages/StudentDashboard';
+import StudentAttendance from './pages/StudentAttendance';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminAttendance from './pages/AdminAttendance';
+import PlansManagement from './pages/PlansManagement';
+import PaymentsManagement from './pages/PaymentsManagement';
+import ExpensesManagement from './pages/ExpensesManagement';
+import StudentManagement from './pages/StudentManagement';
+
 import './App.css';
 
 export default function App() {
   return (
-    <div className="app-container">
-      {/* Header */}
-      <header className="navbar">
-        <div className="nav-brand">
-          <div className="brand-logo">
-            <Utensils size={24} />
-          </div>
-          <div>
-            <h1 className="brand-title">MealMate</h1>
-            <p className="brand-subtitle">Mess & Hostel Meal Management System</p>
-          </div>
+    <AuthProvider>
+      <BrowserRouter>
+        <div className="app-container">
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/plans" element={<PlansManagement />} />
+
+              {/* Student Protected Routes */}
+              <Route
+                path="/student"
+                element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/student/attendance"
+                element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <StudentAttendance />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/student/payments"
+                element={
+                  <ProtectedRoute allowedRoles={['student']}>
+                    <PaymentsManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Protected Routes */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/students"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <StudentManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/attendance"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminAttendance />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/expenses"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <ExpensesManagement />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/payments"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <PaymentsManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Catch-all */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+
+          <footer className="footer">
+            <p>MealMate &bull; Student Mess & Hostel Dining Management System &bull; React + Express + MySQL</p>
+          </footer>
         </div>
-        <div className="nav-pill">
-          <ShieldCheck size={16} />
-          <span>Phase 1: Foundation Ready</span>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="main-content">
-        {/* Welcome Section */}
-        <section className="hero-section">
-          <h2>Welcome to MealMate</h2>
-          <p>
-            Project foundation has been initialized with React + Vite, Express, and a normalized MySQL schema.
-          </p>
-        </section>
-
-        {/* Live Diagnostics Component */}
-        <section className="diagnostics-section">
-          <HealthStatus />
-        </section>
-
-        {/* Architectural Scope Overview */}
-        <section className="features-preview">
-          <h3>Architectural Modules (Schema Ready)</h3>
-          <div className="features-grid">
-            <div className="feature-card">
-              <Users size={24} className="feature-icon" />
-              <h4>User & Role Management</h4>
-              <p>Admins and Students with hashed passwords and profile records.</p>
-            </div>
-            <div className="feature-card">
-              <Utensils size={24} className="feature-icon" />
-              <h4>Mess Subscription Plans</h4>
-              <p>Configurable fixed monthly charges and per-meal rate plans.</p>
-            </div>
-            <div className="feature-card">
-              <CalendarCheck size={24} className="feature-icon" />
-              <h4>Daily Meal Attendance</h4>
-              <p>Breakfast, lunch, and dinner attendance tracking with date uniqueness.</p>
-            </div>
-            <div className="feature-card">
-              <CreditCard size={24} className="feature-icon" />
-              <h4>Payment Records</h4>
-              <p>Tracking UPI, cash, and bank payments linked to student ledgers.</p>
-            </div>
-            <div className="feature-card">
-              <ShoppingBag size={24} className="feature-icon" />
-              <h4>Mess Operating Expenses</h4>
-              <p>Grocery, vegetables, and utility bills logging for accurate meal rates.</p>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <p>MealMate Mess Management System &bull; Windows Environment &bull; Node.js + Express + React</p>
-      </footer>
-    </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
-

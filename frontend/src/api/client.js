@@ -9,6 +9,18 @@ const apiClient = axios.create({
   timeout: 10000
 });
 
+// Request interceptor to automatically attach JWT token if present
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('mealmate_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response interceptor for centralized error processing
 apiClient.interceptors.response.use(
   (response) => response,
