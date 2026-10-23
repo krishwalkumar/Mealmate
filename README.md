@@ -40,3 +40,4 @@ Once MySQL is running, import `database/schema.sql`:
 mysql -u root -p mealmate_db < database/schema.sql
 ```
 *(Or execute the script inside MySQL Workbench)*
+

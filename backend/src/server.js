@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const { pool } = require('./config/db');
 const healthRoutes = require('./routes/health.routes');
+const authRoutes = require('./routes/auth.routes');
+const mealRoutes = require('./routes/meal.routes');
 const { notFoundHandler, globalErrorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -21,12 +23,28 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.json({
     message: 'MealMate API Server is running',
-    healthCheck: '/api/health'
+    version: '1.0.0',
+    endpoints: {
+      health: 'GET /api/health',
+      auth: {
+        register: 'POST /api/auth/register',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me'
+      },
+      meals: {
+        toggle: 'POST /api/meals/toggle',
+        today: 'GET /api/meals/today',
+        myAttendance: 'GET /api/meals/my-attendance',
+        dailyOverview: 'GET /api/meals/daily'
+      }
+    }
   });
 });
 
 // Mount Routes
 app.use('/api', healthRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/meals', mealRoutes);
 
 // Error Handling
 app.use(notFoundHandler);
@@ -53,3 +71,4 @@ process.on('SIGINT', async () => {
 });
 
 module.exports = app;
+

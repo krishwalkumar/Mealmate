@@ -29,3 +29,4 @@ async function getHealth(req, res, next) {
 module.exports = {
   getHealth
 };
+

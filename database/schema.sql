@@ -91,3 +91,4 @@ CREATE TABLE IF NOT EXISTS mess_expenses (
     FOREIGN KEY (recorded_by) REFERENCES users(id) ON DELETE SET NULL,
     INDEX idx_expense_date (expense_date)
 ) ENGINE=InnoDB;
+
