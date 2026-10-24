@@ -12,3 +12,4 @@ router.put('/:id', verifyToken, requireRole('admin'), updatePlan);
 router.delete('/:id', verifyToken, requireRole('admin'), deletePlan);
 
 module.exports = router;
+

@@ -20,3 +20,4 @@ router.post('/', requireRole('admin'), recordPayment);
 router.put('/:id/status', requireRole('admin'), updatePaymentStatus);
 
 module.exports = router;
+
